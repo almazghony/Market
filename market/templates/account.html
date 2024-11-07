@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% include 'modals/post.html' %}
+{% include 'modals/update.html' %}
+{% include 'modals/rm_user.html' %}
+
+{% block title %}
+{{ current_user.username }} 
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row">
+    <!-- User Profile Section -->
+    <div class="col-lg-4">
+      <div class="card mb-4 bg-dark">
+        <div class="card-body text-center">
+          <div class="profile-pic-wrapper" style="position: relative; width: 150px; height: 150px; overflow: hidden; border-radius: 50%; margin: 0 auto;">
+            <img src="{{ url_for('static', filename='profile_pics/' + (current_user.image_file if current_user.image_file else 'default/default.jpg')) }}" 
+                 alt="Profile picture of {{ current_user.name }}" 
+                 class="img-fluid" 
+                 style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <h5 class="my-3">{{ current_user.name }}</h5>
+          <p class="text-muted mb-1">{{ current_user.state }}</p>
+          <p class="text-muted mb-4">{{ current_user.location }}</p>
+        </div>
+      </div>
+
+      <!-- User Contact Details -->
+      <div class="card mb-4 bg-dark">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-4"><p class="mb-0">Email</p></div>
+            <div class="col-sm-8"><p class="text-muted mb-0">{{ current_user.email_address }}</p></div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-4"><p class="mb-0">Phone</p></div>
+            <div class="col-sm-8"><p class="text-muted mb-0">{{ current_user.mobile_number1 }}</p></div>
+          </div>
+          {% if current_user.mobile_number2 %}
+          <hr>
+          <div class="row">
+            <div class="col-sm-4"><p class="mb-0">Other Number</p></div>
+            <div class="col-sm-8"><p class="text-muted mb-0">{{ current_user.mobile_number2 }}</p></div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Profile Actions -->
+      <div class="card mb-4 bg-dark">
+        <div class="card-body text-center">
+          <div class="button-group d-flex flex-column">
+            <button class="btn btn-outline-success btn-block mb-2" data-toggle="modal" data-target="#PostItem">Add an Item</button>
+            <div class="d-flex justify-content-between">
+              <button class="btn btn-outline-info flex-fill mr-1" data-toggle="modal" data-target="#UpdateUser">Update Account</button>
+              <button class="btn btn-outline-danger flex-fill ml-1" data-toggle="modal" data-target="#RemoveUser">Delete Account</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- End col-lg-4 -->
+
+    <!-- User's Items Section -->
+    <div class="col-lg-8">
+      <h2>Your Items in the Market</h2>
+      <br>
+      <div class="row">
+        {% for item in owned_items %}
+        <!-- Modal includes -->
+        {% include 'modals/remove.html' %}
+        {% include 'modals/info.html' %}
+        {% include 'modals/update_item.html' %}
+        {% include 'modals/pics.html' %}
+        
+        <!-- Item Card -->
+        <div class="col-sm-6 col-md-4 mb-4">
+          <div class="card bg-dark text-center" id="itemCard-{{ item.id }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.name }}</h5>
+              <p class="card-text">{{ item.location }} <br> <strong>{{ item.price }}$ :السعر</strong></p>
+              <div class="button-group d-flex flex-wrap justify-content-between">
+                <button type="button" class="btn btn-outline-info flex-fill m-1" data-toggle="modal" data-target="#MoreInfo-{{ item.id }}">More Info</button>
+                <button type="button" class="btn btn-outline-success flex-fill m-1" data-toggle="modal" data-target="#UpdateItem-{{ item.id }}">Update</button>
+                <button type="button" class="btn btn-outline-success flex-fill m-1" data-toggle="modal" data-target="#PicItem-{{ item.id }}">Pictures</button>
+                <button type="button" class="btn btn-outline-danger flex-fill m-1" data-toggle="modal" data-target="#RemoveItem-{{ item.id }}">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div> <!-- End col-lg-8 -->
+  </div> <!-- End row -->
+</div>
+
+<style>
+  .button-group .btn {
+    flex: 1 1 30%;    /* Allow buttons to take equal width */
+    margin-bottom: 10px; /* Space between rows of buttons */
+  }
+  .card {
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  }
+  .modal-backdrop {
+    z-index: 1040 !important;
+  }
+  .modal {
+    z-index: 1050 !important;
+  }
+</style>
+{% endblock %}
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Adding alerts when modals are opened
+  document.querySelectorAll('button[data-toggle="modal"]').forEach(button => {
+      button.addEventListener('click', (event) => {
+          let targetModal = event.target.getAttribute('data-target');
+          if (targetModal.includes('MoreInfo')) {
+              showAlert('Opening more info...');
+          } else if (targetModal.includes('UpdateItem')) {
+              showAlert('Preparing update modal...');
+          } else if (targetModal.includes('RemoveItem')) {
+              showAlert('Careful! You are about to remove an item.');
+          }
+      });
+  });
+
+  // Function to show alerts
+  function showAlert(message) {
+      const alertBox = document.createElement('div');
+      alertBox.className = 'alert alert-info alert-dismissible fade show';
+      alertBox.role = 'alert';
+      alertBox.innerHTML = `
+          <strong>Note:</strong> ${message}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      `;
+      document.body.prepend(alertBox);
+      setTimeout(() => {
+          alertBox.classList.add('fade');
+          setTimeout(() => alertBox.remove(), 500);
+      }, 3000);
+  }
+});
+</script>

@@ -1,0 +1,73 @@
+<div class="modal fade" id="PostItem" tabindex="-1" role="dialog" aria-labelledby="PostItem" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header">
+          <h5 class="modal-title">Add New Item</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" enctype="multipart/form-data">
+            {{ post_form.hidden_tag() }}
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label font-weight-bold">{{ post_form.name.label }}</label>
+              <div class="col-sm-4">
+                {{ post_form.name(class="form-control", placeholder="Name") }}
+              </div>
+              <label class="col-sm-2 col-form-label font-weight-bold">{{ post_form.price.label }}</label>
+              <div class="col-sm-4">
+                {{ post_form.price(class="form-control", placeholder="Price") }}
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label font-weight-bold">{{ post_form.description.label }}</label>
+              <div class="col-sm-10">
+                {{ post_form.description(class="form-control", placeholder="Describe your item", style="width: 100%;") }}
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label font-weight-bold">{{ post_form.location.label }}</label>
+              <div class="col-sm-10">
+                {{ post_form.location(class="form-control", placeholder="Enter the location", style="width: 100%;") }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="font-weight-bold">{{ post_form.type.label }}</label>
+              {% for subfield in post_form.type %}
+                <div class="form-check form-check-inline">
+                  {{ subfield(class="form-check-input") }}
+                  <label class="form-check-label">{{ subfield.label.text }}</label>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="form-group">
+              <label class="font-weight-bold">{{ post_form.delivery.label }}</label>
+              {% for subfield in post_form.delivery %}
+                <div class="form-check form-check-inline">
+                  {{ subfield(class="form-check-input") }}
+                  <label class="form-check-label">{{ subfield.label.text }}</label>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="form-group row">
+              <label class="col-form-label">{{ post_form.picture.label }}</label>
+              {{ post_form.picture(class="form-control-file", multiple=True) }}
+              {% if post_form.picture.errors %}
+                {% for error in post_form.picture.errors %}
+                  <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <input id="posted_item" name="posted_item" type="hidden" value="posted_item">
+            <div class="form-group">
+              {{ post_form.submit(class="btn btn-outline-success btn-block") }}
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

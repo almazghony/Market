@@ -1,0 +1,89 @@
+<div class="modal fade" id="UpdateUser" tabindex="-1" role="dialog" aria-labelledby="UpdateUser" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    {{ current_user.name }} تحديث بيانات 
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" style="color:white" enctype="multipart/form-data">
+                    {{ update_form.hidden_tag() }}
+                    <h1 class="h3 mb-3 font-weight-normal">
+                        Update Your Account
+                    </h1>
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label>{{ update_form.name.label }}</label>
+                            {{ update_form.name(class="form-control", placeholder="User Name") }}
+                            {% if update_form.name.errors %}
+                                {% for error in update_form.name.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                    <br>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-6">
+                            <label>{{ update_form.email_address.label }}</label>
+                            {{ update_form.email_address(class="form-control", placeholder="Your email here") }}
+                            {% if update_form.email_address.errors %}
+                                {% for error in update_form.email_address.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                    <br>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label>{{ update_form.mobile_number1.label }}</label>
+                            {{ update_form.mobile_number1(class="form-control", placeholder="Mobile Number") }}
+                            {% if update_form.mobile_number1.errors %}
+                                {% for error in update_form.mobile_number1.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                    <br>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-6">
+                            <label>{{ update_form.mobile_number2.label }}</label>
+                            {{ update_form.mobile_number2(class="form-control", placeholder="Mobile Number 2") }}
+                            {% if update_form.mobile_number2.errors %}
+                                {% for error in update_form.mobile_number2.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                    <br>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group row" style="margin:1%">
+                        <label class="col-form-label">{{ update_form.state.label }}</label>
+                        {{ update_form.state(class="form-control", placeholder="Enter State") }}
+                    </div>
+                    
+                    <div class="form-group row" style="margin:1%">
+                        <label class="col-form-label">{{ update_form.picture.label }}</label>
+                        {{ update_form.picture(class="form-control-file") }}
+                        {% if update_form.picture.errors %}
+                            {% for error in update_form.picture.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                                <br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <br>
+                    <input id="updated_user" name="updated_user" type="hidden" value="updated_user">
+                    {{ update_form.submit(class="btn btn-lg btn-block btn-primary") }}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

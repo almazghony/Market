@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}
+  Categories
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center" style="margin-left: 20px; margin-top: 20px">
+    <div class="col-6 card bg-dark text-center" style="margin:30px; height: 200px; color:white">
+        <div class="card-body">
+            <h1><a href="{{ url_for('items.market_page') }}" style="color: white; text-decoration: none;">Electronics Market</a></h1>
+        </div>
+    </div>
+    <div class="col-6 card bg-dark text-center" style="margin:30px; height: 200px; color:white">
+        <div class="card-body">
+            <h1><a href="{{ url_for('items.market_page') }}" style="color: white; text-decoration: none;">Clothes Market</a></h1>
+        </div>
+    </div>
+</div>
+{% endblock %}

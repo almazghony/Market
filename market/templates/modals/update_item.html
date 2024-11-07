@@ -1,0 +1,89 @@
+<div class="modal fade" id="UpdateItem-{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="UpdateItemLabel-{{ item.id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="UpdateItemLabel-{{ item.id }}">
+                    {{ item.name }} - تحديث بيانات
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {{ update_item.hidden_tag() }}
+                
+                    <!-- Pre-populating the Name and Price fields -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label font-weight-bold">{{ update_item.name.label }}</label>
+                        <div class="col-sm-4">
+                            {{ update_item.name(class="form-control", value=item.name, placeholder="Name") }}
+                        </div>
+                        <label class="col-sm-2 col-form-label font-weight-bold">{{ update_item.price.label }}</label>
+                        <div class="col-sm-4">
+                            {{ update_item.price(class="form-control", value=item.price, placeholder="Price") }}
+                        </div>
+                    </div>
+                
+                    <br>
+                
+                    <!-- Pre-populating the Description field -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label font-weight-bold">{{ update_item.description.label }}</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" name="description" placeholder="Describe your item" style="width: 80%; margin-left: auto; margin-right: auto;">{{ item.description }}</textarea>
+                        </div>
+                    </div>
+                    
+                    
+                
+                    <br>
+                
+                    <!-- Pre-populating the Location field -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label font-weight-bold">{{ update_item.location.label }}</label>
+                        <div class="col-sm-10">
+                            {{ update_item.location(class="form-control", value=item.location, placeholder="اكتب مكان بيع العنصر بدقة", style="width: 80%; margin-left: auto; margin-right: auto;") }}
+                        </div>
+                    </div>
+                
+                    <!-- Pre-populating the Type field (Checkboxes/Radio buttons) -->
+                    <div class="form-group">
+                        <div>
+                            <label class="font-weight-bold form-check-inline">{{ update_item.type.label }}</label>
+                            {% for subfield in update_item.type %}
+                            <div class="form-check form-check-inline">
+                                {{ subfield(class="form-check-input", id=subfield.id, checked=subfield.data == item.type) }}
+                                <label class="form-check-label" for="{{ subfield.id }}">{{ subfield.label.text }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                
+                    <br>
+                
+                    <!-- Pre-populating the Picture field -->
+                    <div class="form-group row" style="margin:1%">
+                        <label class="col-form-label">{{ update_item.images.label }}</label>
+                        {{ update_item.images(class="form-control-file", multiple=True) }}
+                        {% if update_item.images.errors %}
+                            {% for error in update_item.images.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                                <br>
+                            {% endfor %}
+                        {% endif %}
+                        <br>
+                        <br>
+                    </div>
+                
+                    <input id="updated_item" name="updated_item" type="hidden" value="{{ item.id }}">
+                    {{ update_item.submit(class="btn btn-outline-success btn-block") }}
+                </form>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

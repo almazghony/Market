@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% block title %}
+  {{ type|capitalize }} Market Page
+{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- Category Selection Links -->
+    <div class="mb-3 text-center">
+        <a href="{{ url_for('items.market_page', category='electronics') }}" class="btn btn-primary mx-2">Electronics</a>
+        <a href="{{ url_for('items.market_page', category='clothes') }}" class="btn btn-primary mx-2">Clothes</a>
+    </div>
+
+    <!-- Check if we have selected a category -->
+    {% if type %}
+        <h2 class="text-center text-white">Available {{ type | capitalize }} Items</h2>
+
+        <form method="GET" action="{{ url_for('items.market_page', category=type) }}" class="form-inline mb-3 justify-content-center flex-wrap">
+            <input type="hidden" name="category" value="{{ type }}">
+        
+            <div class="form-group mx-2">
+                <label for="priceRange" class="sr-only">Price Range</label>
+                <select name="priceRange" id="priceRange" class="bg-dark form-control text-white">
+                    <option value="">Price Range</option>
+                    <option value="1" {% if request.args.get('priceRange') == '1' %}selected{% endif %}>Under $50</option>
+                    <option value="2" {% if request.args.get('priceRange') == '2' %}selected{% endif %}>$50 - $100</option>
+                    <option value="3" {% if request.args.get('priceRange') == '3' %}selected{% endif %}>Over $100</option>
+                </select>
+            </div>
+        
+            <div class="form-group mx-2">
+                <label for="location" class="sr-only">Location</label>
+                <input type="text" name="location" id="location" class="form-control bg-dark text-white placeholder-white" placeholder="Location" value="{{ request.args.get('location', '') }}">
+            </div>
+        
+            <div class="form-group mx-2">
+                <label for="delivery" class="sr-only">Delivery</label>
+                <select name="delivery" id="delivery" class="bg-dark form-control text-white">
+                    <option value="">Delivery</option>
+                    <option value="Yes" {% if request.args.get('delivery') == 'Yes' %}selected{% endif %}>Yes</option>
+                    <option value="No" {% if request.args.get('delivery') == 'No' %}selected{% endif %}>No</option>
+                </select>
+            </div>
+        
+            <div class="form-group mx-2">
+                <label for="sort" class="sr-only">Sort by Price</label>
+                <select class="form-control bg-dark text-white" name="sort" id="sort" onchange="this.form.submit()">
+                    <option value="asc" {% if request.args.get('sort') == 'asc' %}selected{% endif %}>Low to High</option>
+                    <option value="desc" {% if request.args.get('sort') == 'desc' %}selected{% endif %}>High to Low</option>
+                </select>
+            </div>
+        
+            <button type="submit" class="btn btn-custom mx-2">Filter</button>
+        </form>
+        
+
+        <!-- Item Display -->
+        <div class="table-responsive">
+            <table class="table table-hover table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Delivery</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in market_items %}
+                        {% include 'modals/info.html' %}
+                        {% include 'modals/pics.html' %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.price }}$</td>
+                            <td>{{ item.location }}</td>
+                            <td>{{ item.delivery }}</td>
+                            <td>
+                                <div class="d-none d-md-block"> <!-- Hidden on mobile -->
+                                    <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#MoreInfo-{{ item.id }}">More Info</button>
+                                    <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#PicItem-{{ item.id }}">Pictures</button>
+                                    <a href="{{ url_for('users.owner_profile', owner_id=item.id) }}" class="btn btn-outline btn-success">Owner</a>
+                                </div>
+                                <div class="d-md-none"> <!-- Visible on mobile -->
+                                    <button class="btn btn-outline btn-info mb-1" data-toggle="modal" data-target="#MoreInfo-{{ item.id }}">More Info</button>
+                                    <button class="btn btn-outline btn-success mb-1" data-toggle="modal" data-target="#PicItem-{{ item.id }}">Pictures</button>
+                                    <a href="{{ url_for('users.owner_profile', owner_id=item.id) }}" class="btn btn-outline btn-success">Owner</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <!-- Default view: show categories if no type is selected -->
+        <h2 class="text-center text-white">Select a Category to Explore Items</h2>
+    {% endif %}
+</div>
+
+<style>
+    h2, p {
+        color: white; /* Ensures text is visible against the dark background */
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    @media (max-width: 576px) {
+        /* Stack form elements on small screens */
+        .form-inline {
+            flex-direction: column; 
+            align-items: flex-start; /* Align left */
+        }
+        
+        .form-group {
+            width: 100%; /* Make form controls full width */
+        }
+    }
+    /* Custom style for white placeholders */
+    ::placeholder {
+        color: rgba(255, 255, 255, 0.6); /* White with some opacity for elegance */
+        font-style: italic; /* Optional, makes it look more elegant */
+    }
+
+    .placeholder-white::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+    /* Override the btn-success class to make it red */
+    .btn-custom {
+        background-color: #ff0000;  /* Red background color */
+        border-color: #cc0000;      /* Darker red for the border */
+        color: white;               /* White text for better contrast */
+    }
+
+    .btn-custom:hover {
+        background-color: #cc0000;  /* Darker red on hover */
+        border-color: #990000;      /* Even darker red for the border on hover */
+    }
+
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+<!-- verification.html -->
+{% extends 'base.html' %}
+{% block title %}Verify Your Email{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Email Verification</h1>
+    <p>Please check your email for a verification link. If you didn't receive it, you can <a href="{{ url_for('users.resend_verification')}}">click here</a> to resend the verification email.</p>
+</div>
+{% endblock %}

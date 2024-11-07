@@ -1,0 +1,80 @@
+<style>
+
+    .forgot-password-link {
+        color: #00bcd4;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1rem;
+        transition: color 0.3s ease-in-out;
+        cursor: pointer;
+    }
+
+    .forgot-password-link:hover {
+        color: #00acc1;
+        text-decoration: underline;
+    }
+
+</style>
+
+
+
+
+{% extends 'base.html' %}
+{% block title %}
+    Registeration Page
+{% endblock %}
+
+
+{% include 'modals/reset_request.html' %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-dark" style="color:white">
+    <div class="col-md-5 p-lg-5 mx-auto my-5">
+        <h1 class="display-4 font-weight-normal">You logged in as {{ current_user.username }}</h1>
+        <p class="lead font-weight-normal">Start purchasing products by clicking the link below</p>
+        <a class="btn btn-danger" href="{{ url_for('users.logout_page') }}">Log out</a>
+    </div>
+    <div class="product-device box-shadow d-none d-md-block"></div>
+    <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
+</div>
+{% else %}
+<body class="text-center">
+<div class="container" style="margin-top:2%">
+    <form method="POST" class="form-register" style="color:white">
+    {{ form.hidden_tag() }}
+        <h1 class ="h3 mb-3 font-weight-normal">
+            Login
+        </h1>
+        <div class="form-group row">
+            <div class="col-sm-6">
+                <label><h5>{{ form.email_address.label }}</h5></label>
+                {{ form.email_address(class="form-control", placeholder="Your email here") }}
+            </div>
+            <div class="col-sm-6">
+                <label><h5>{{ form.password.label }}</h5></label>
+                {{ form.password(class="form-control", placeholder='Password') }}
+            </div>
+        </div>
+        <br>
+        <input type="hidden" name="login" id="login">
+        {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
+        <br>
+        <h6>
+            <a class="forgot-password-link" data-toggle="modal" data-target="#Reset">Forgot Password?</a>
+
+        </h6>
+        <br>
+
+        <h6>don't have an account yet?</h6>
+        <a class="btn btn-sm btn-secondary" href="{{ url_for('users.register_page') }}">Register</a>
+    </form>
+</div>
+</body>
+
+{% endif %}
+{% endblock %}
+
+
+
+

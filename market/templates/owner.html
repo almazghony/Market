@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Owner profile page for Flask Market. View and manage owner's items.">
+    <meta name="keywords" content="owner, profile, flask market, items">
+    <title>Owner Profile - {{ owner.name }}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1d1f21;
+            color: #fff;
+        }
+        .profile-page {
+            margin-top: 50px;
+        }
+        .profile-pic-wrapper img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #5bc0de;
+            transition: transform 0.3s;
+        }
+        .profile-pic-wrapper img:hover {
+            transform: scale(1.05);
+        }
+        .card {
+            background-color: #2a2d31;
+            border: none;
+            border-radius: 12px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+        }
+        .btn-outline-info:hover, .btn-outline-success:hover, .btn-outline-danger:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container profile-page">
+        <!-- Owner Profile Section -->
+        <div class="owner-info-section text-center">
+            <div class="profile-pic-wrapper">
+                <img src="{{ url_for('static', filename='profile_pics/' + (owner.image_file if owner.image_file else 'default/default.jpg')) }}" alt="Profile picture of {{ owner.name }}">
+            </div>
+            <h5>{{ owner.name }}</h5>
+            <p>{{ owner.state }} - {{ owner.location }}</p>
+            <p>Email: {{ owner.email_address }}</p>
+            <p>Phone: {{ owner.mobile_number1 }}{% if owner.mobile_number2 %} / {{ owner.mobile_number2 }}{% endif %}</p>
+        </div>
+
+        <!-- Owner's Items Section -->
+        <h5 class="owner-items text-center mt-4">Owner's Items</h5>
+        <div class="row mt-4">
+            {% for item in owner.items %}
+            {% include 'modals/remove.html' %}
+            {% include 'modals/info.html' %}
+            {% include 'modals/update_item.html' %}
+            {% include 'modals/pics.html' %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100" style="width: 16rem;">
+                    <div class="card-body text-center">
+                        <h6 class="card-title">{{ item.name }}</h6>
+                        <p class="card-text">{{ item.location }}<br><strong>{{ item.price }}$ :السعر</strong></p>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-outline-info btn-sm mx-1" data-toggle="modal" data-target="#MoreInfo-{{ item.id }}">More Info</button>
+                            <button class="btn btn-outline-success btn-sm mx-1" data-toggle="modal" data-target="#PicItem-{{ item.id }}">Pictures</button>
+                            {% if owner.id == current_user.id %}
+                                <button class="btn btn-outline-success btn-sm mx-1" data-toggle="modal" data-target="#UpdateItem-{{ item.id }}">Update</button>
+                                <button class="btn btn-outline-danger btn-sm mx-1" data-toggle="modal" data-target="#RemoveItem-{{ item.id }}">Remove</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Back Button -->
+        <div class="text-center mt-4">
+            <a href="javascript:history.back()" class="btn btn-secondary">Back to Previous Page</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap & jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
