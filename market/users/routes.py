@@ -391,10 +391,10 @@ def reset_password():
         if user:
             send_mail(user)  # Send the reset email
             flash("Check your email for a password reset link!", category="success")
-            return redirect(url_for("users.login_page"))
+            return redirect(url_for("login_page"))
         else:
             flash("Email does not exist.", category="danger")
-            return redirect(url_for("users.login_page"))  # Redirect after error
+            return redirect(url_for("login_page"))  # Redirect after error
 
     for error in reset_form.errors.values():
         print(error)
