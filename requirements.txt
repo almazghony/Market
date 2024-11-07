@@ -10,3 +10,4 @@ itsdangerous==2.2.0
 Pillow==11.0.0
 WTForms==3.2.1
 gunicorn
+email_validator
