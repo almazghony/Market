@@ -2,7 +2,7 @@ import os
 
 class Config:
     # Database URI - replace with your actual database URL
-    SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI", "sqlite:///market.db")
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///market.db'
 
     # Secret Key - make sure to set a strong, random secret key
     SECRET_KEY = os.environ.get("SECRET_KEY", "your_secret_key_here")
